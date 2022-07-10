@@ -15,6 +15,7 @@
 - [Change Default Settings](#change-default-settings)
 - [Development](#development)
 - [Maintainers](#maintainers)
+- [License](#license)
 
 ## Download
 
@@ -50,7 +51,7 @@ Press **Alt + Enter** to download the PDF.
 
 ## Change Default Settings
 
-By default, ArXiv uses `arxiv` as keyword, downloads the PDFs to the Downloads folder and uses the article title as PDF name. You can change these default settings in Alfred's preferences. For this, go to `Workflows`, select `ArXiv` and click on the `Configure workflow and variables` button in the top right corner.
+By default, ArXiv uses `arxiv` as keyword, downloads the PDFs to the Downloads folder and uses the article title as PDF name. You can change these default settings in Alfred's preferences. For this, go to Workflows, select ArXiv and click on the `Configure workflow` button in the top bar.
 
 ![Step 1](./assets/configure_download_folder_step1.png)
 
@@ -91,3 +92,7 @@ Then move all four binaries to the workflow folder.
 ## Maintainers
 
 [@SimonNick](https://github.com/SimonNick).
+
+## License
+
+[MIT License](LICENSE) © Simon Nick
