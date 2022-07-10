@@ -2,7 +2,7 @@
 
 [Alfred](https://www.alfredapp.com/) workflow to search for articles on arXiv.org and download them.
 
-![Example](./assets/arvix-workflow.gif.gif)
+![Example](./assets/arvix-workflow.gif)
 
 ## Table of Contents
 
