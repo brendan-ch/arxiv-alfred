@@ -75,7 +75,7 @@ The PDF name is automatically generated using a user-provided template string. Y
 - `%year%`: The publication year
 - `%month%`: The publication month
 - `%title%`: The title of the article
-- `%id`: The article ID
+- `%id%`: The article ID
 
 Example: `%year%, %title%` could result in `2017, Attention Is All You Need`
 
