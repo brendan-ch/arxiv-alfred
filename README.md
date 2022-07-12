@@ -35,11 +35,11 @@ Since [MacOS Catalina](https://developer.apple.com/news/?id=10032019a) Apple doe
 
 ## Usage
 
-`arxiv [search string]`, e.g. `arxiv longformer`
+`arxiv <query>`, e.g. `arxiv longformer`
 
 This will search arxiv.org for papers matching your search criteria and display the most relevant ones.
 
-`arxiv [arxiv URL | arxiv ID]`, e.g. `arxiv https://arxiv.org/abs/2004.05150` or `arxiv 2004.05150`
+`arxiv <arxiv URL | arxiv ID>`, e.g. `arxiv https://arxiv.org/abs/2004.05150` or `arxiv 2004.05150`
 
 This will display the provided arxiv article and offer the possibility to download the PDF quickly.
 

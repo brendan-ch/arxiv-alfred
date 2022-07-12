@@ -57,8 +57,8 @@ func searchItems(query string) ([]*gofeed.Item, error) {
 		}
 	}
 
-	// ... otherwise search for articles using the provided keywords
-	// preprocess query (this was found to result in the best / most reliable search results)
+	// ... otherwise search for articles using the provided query
+	// preprocess query (this was found to yield the best / most reliable search results)
 	re, err := regexp.Compile(`[^0-9a-zA-Z]`)
 	if err != nil {
 		log.Fatal(err)
