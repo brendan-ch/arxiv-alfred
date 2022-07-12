@@ -1,6 +1,6 @@
 # Alfred arXiv workflow
 
-[Alfred](https://www.alfredapp.com/) workflow to search for articles on arXiv.org and download them.
+[Alfred](https://www.alfredapp.com/) workflow to search for articles on arXiv.org and view or download them. The workflow was tested with Alfred 5 Early Access.
 
 ![Example](./assets/arvix-workflow.gif)
 
@@ -19,7 +19,7 @@
 
 ## Download
 
-Click [here](https://github.com/SimonNick/arxiv-alfred/releases/download/v.1.0.0/arXiv.alfredworkflow) and download `arXiv.alfredworkflow`.
+Click [here](https://github.com/SimonNick/arxiv-alfred/releases/download/v.1.1.0/arXiv.alfredworkflow) and download `arXiv.alfredworkflow`.
 
 ## Installation
 
@@ -43,9 +43,13 @@ This will search arxiv.org for papers matching your search criteria and display 
 
 This will display the provided arxiv article and offer the possibility to download the PDF quickly.
 
-Press **Enter** do view the article on arxiv.org.
+Press **Enter** to view the article on arxiv.org.
 
-Press **Cmd + Enter** to directly view the PDF in the browser.
+Press **Shift + Enter** to copy the article URL.
+
+Press **Cmd + Enter** to view the PDF in the browser.
+
+Press **Shift + Cmd + Enter** to copy the PDF URL.
 
 Press **Alt + Enter** to download the PDF.
 
@@ -62,7 +66,7 @@ You can now see three text fields that allow you to change the
 
 ![Step 2](./assets/configure_download_folder_step2.png)
 
-The PDF name is automatically generated using from a user-provided template string. You can use the following placeholders in the template string:
+The PDF name is automatically generated using a user-provided template string. You can use the following placeholders in the template string:
 - `%firstauthor_fullname%`: The full name of the first author
 - `%firstauthor_lastname%`: The last name of the first author
 - `%et_al%`: If there is more than one author, this will result in `et al`
@@ -71,27 +75,23 @@ The PDF name is automatically generated using from a user-provided template stri
 - `%year%`: The publication year
 - `%month%`: The publication month
 - `%title%`: The title of the article
+- `%id`: The article ID
 
 Example: `%year%, %title%` could result in `2017, Attention Is All You Need`
 
 ## Development
 
-Build the workflow:
+Run the `compile.sh` script:
 
 ```shell
-cd download
-GOOS=darwin GOARCH=arm64 go build -o download_arm64 download.go
-GOOS=darwin GOARCH=amd64 go build -o download_amd64 download.go
-cd ../workflow
-GOOS=darwin GOARCH=arm64 go build -o arxiv_arm64 arxiv.go
-GOOS=darwin GOARCH=amd64 go build -o arxiv_amd64 arxiv.go
+sh compile.sh
 ```
 
-Then move all four binaries to the workflow folder.
+Then move all four compiled binaries under `download` and `workflow` to the Alfred workflow folder.
 
 ## Maintainers
 
-[@SimonNick](https://github.com/SimonNick).
+[@SimonNick](https://github.com/SimonNick)
 
 ## License
 

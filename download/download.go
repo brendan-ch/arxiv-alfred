@@ -17,10 +17,11 @@ import (
 
 func main() {
 
-	articleURL := os.Args[1]
+	query := os.Args[1]
 	downloadFolder := os.Args[2]
-	format := os.Args[3]
-	articleID, err := findArticleID(articleURL)
+	PDFNameTemplate := os.Args[3]
+
+	articleID, err := findArticleID(query)
 	if err != nil {
 		log.Fatal(err)
 		return
@@ -41,34 +42,52 @@ func main() {
 	}
 
 	article := res.Items[0]
-	fileName, err := generateFilename(article, downloadFolder, format)
+	fileName, err := generateFileName(article, PDFNameTemplate)
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+	filePath, err := generateFilePath(downloadFolder, fileName)
 	if err != nil {
 		log.Fatal(err)
 		return
 	}
 
 	pdfURL := fmt.Sprintf("https://arxiv.org/pdf/%s.pdf", articleID)
-	log.Printf("downloading %s to \"%s\"", pdfURL, fileName)
-	downloadFile(pdfURL, fileName)
+	log.Printf("downloading %s to \"%s\"", pdfURL, filePath)
+	err = downloadFile(pdfURL, filePath)
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
 }
 
-func findArticleID(articleURL string) (string, error) {
+func findArticleID(query string) (string, error) {
 
-	// try to extract article ID (https://arxiv.org/help/arxiv_identifier) from query
+	// try to extract the article ID (https://arxiv.org/help/arxiv_identifier) from the query
 	patterns := [...]string{
 		`\d{4}.\d{4,5}(?:v\d+)?`,               // ID since April 2007
 		`[a-z]+(?:-[a-z]+)?\/\d{5,7}(?:v\d+)?`, // ID up to March 2007
 	}
 	for _, pattern := range patterns {
 		r := regexp.MustCompile(pattern)
-		if r.MatchString(articleURL) {
-			return r.FindString(articleURL), nil
+		if r.MatchString(query) {
+			return r.FindString(query), nil
 		}
 	}
-	return "", errors.New("article not found")
+	return "", errors.New("couldn't extract the article ID from the provided query")
 }
 
-func generateFilename(article *gofeed.Item, downloadFolder string, format string) (string, error) {
+func generateFilePath(downloadFolder string, fileName string) (string, error) {
+	dirName, err := os.UserHomeDir()
+	if err != nil {
+		return "", err
+	}
+	filePath := filepath.Join(dirName, downloadFolder, fileName+".pdf")
+	return filePath, nil
+}
+
+func generateFileName(article *gofeed.Item, PDFNameTemplate string) (string, error) {
 
 	title := article.Title
 	title = strings.Replace(title, "\n ", "", -1)
@@ -79,15 +98,16 @@ func generateFilename(article *gofeed.Item, downloadFolder string, format string
 	firstAuthorLastName := strings.Join(strings.Split(firstAuthorFullName, " ")[1:], " ")
 
 	authorsStringFullName := firstAuthorFullName
-	for _, author := range article.Authors[1:] {
-		authorsStringFullName += ", " + author.Name
-	}
 	authorsStringLastName := firstAuthorLastName
 	for _, author := range article.Authors[1:] {
+		authorsStringFullName += ", " + author.Name
 		authorsStringFullName += ", " + strings.Join(strings.Split(author.Name, " ")[1:], " ")
 	}
 
-	t, _ := time.Parse(time.RFC3339, article.Published)
+	t, err := time.Parse(time.RFC3339, article.Published)
+	if err != nil {
+		return "", err
+	}
 	year := fmt.Sprintf("%d", t.Year())
 	month := fmt.Sprintf("%02d", t.Month())
 
@@ -96,22 +116,26 @@ func generateFilename(article *gofeed.Item, downloadFolder string, format string
 		et_al = ""
 	}
 
-	fileName := format
-	fileName = strings.Replace(fileName, "%firstauthor_fullname%", firstAuthorFullName, -1)
-	fileName = strings.Replace(fileName, "%firstauthor_lastname%", firstAuthorLastName, -1)
-	fileName = strings.Replace(fileName, "%authors_fullname%", authorsStringFullName, -1)
-	fileName = strings.Replace(fileName, "%authors_lastname%", authorsStringLastName, -1)
-	fileName = strings.Replace(fileName, "%year%", year, -1)
-	fileName = strings.Replace(fileName, "%month%", month, -1)
-	fileName = strings.Replace(fileName, "%title%", title, -1)
-	fileName = strings.Replace(fileName, "%et_al%", et_al, -1)
+	URLparts := strings.Split(article.GUID, "/")
+	ID := URLparts[len(URLparts)-1]
 
-	dirname, err := os.UserHomeDir()
-	if err != nil {
-		return "", err
+	substitutions := map[string]string{
+		"firstauthor_fullname": firstAuthorFullName,
+		"firstauthor_lastname": firstAuthorLastName,
+		"authors_fullname":     authorsStringFullName,
+		"authors_lastname":     authorsStringLastName,
+		"year":                 year,
+		"month":                month,
+		"title":                title,
+		"et_al":                et_al,
+		"id":                   ID,
 	}
-	filePath := filepath.Join(dirname, downloadFolder, fileName+".pdf")
-	return filePath, nil
+
+	fileName := PDFNameTemplate
+	for placeholder, substitution := range substitutions {
+		fileName = strings.Replace(fileName, "%"+placeholder+"%", substitution, -1)
+	}
+	return fileName, nil
 
 }
 

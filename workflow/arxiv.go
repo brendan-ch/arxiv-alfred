@@ -42,7 +42,7 @@ func run() {
 
 func searchItems(query string) ([]*gofeed.Item, error) {
 
-	// try to extract article ID (https://arxiv.org/help/arxiv_identifier) from query
+	// try to extract the article ID (https://arxiv.org/help/arxiv_identifier) from the query and retrieve the article ...
 	patterns := [...]string{
 		`\d{4}.\d{4,5}(?:v\d+)?`,               // ID since April 2007
 		`[a-z]+(?:-[a-z]+)?\/\d{5,7}(?:v\d+)?`, // ID up to March 2007
@@ -57,7 +57,8 @@ func searchItems(query string) ([]*gofeed.Item, error) {
 		}
 	}
 
-	// otherwise search for the provided keywords
+	// ... otherwise search for articles using the provided keywords
+	// preprocess query (this was found to result in the best / most reliable search results)
 	re, err := regexp.Compile(`[^0-9a-zA-Z]`)
 	if err != nil {
 		log.Fatal(err)
@@ -111,5 +112,6 @@ func addItem(item *gofeed.Item) {
 
 	pdfURL := strings.Replace(item.Link, "abs", "pdf", -1) + ".pdf"
 	resultItem.Cmd().Arg(pdfURL)
+	resultItem.NewModifier("cmd", "shift").Arg(pdfURL)
 
 }
