@@ -19,7 +19,7 @@
 
 ## Download
 
-Click [here](https://github.com/SimonNick/arxiv-alfred/releases/download/v.1.1.0/arXiv.alfredworkflow) and download `arXiv.alfredworkflow`.
+Click [here](https://github.com/SimonNick/arxiv-alfred/releases/download/v1.1.0/arXiv.alfredworkflow) and download `arXiv.alfredworkflow`.
 
 ## Installation
 
