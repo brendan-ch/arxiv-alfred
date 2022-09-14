@@ -1,6 +1,6 @@
 # Alfred arXiv workflow
 
-[Alfred](https://www.alfredapp.com/) workflow to search for articles on arXiv.org and view or download them. The workflow was tested with Alfred 5 Early Access.
+[Alfred](https://www.alfredapp.com/) workflow to search for articles on arXiv.org and view or download them. The workflow was tested with Alfred 5.
 
 ![Example](./assets/arvix-workflow.gif)
 
