@@ -53,7 +53,14 @@ func searchItems(query string) ([]*gofeed.Item, error) {
 			articleID := r.FindString(query)
 			log.Printf("Matched pattern, article ID: %s", articleID)
 			request := fmt.Sprintf("http://export.arxiv.org/api/query?id_list=%s", articleID)
-			return fetchResults(request)
+			log.Printf("API call: %s", request)
+			items, err := fetchResults(request)
+			if err != nil {
+				log.Fatal(err)
+			}
+			if containsValidItem(items) {
+				return items, nil
+			}
 		}
 	}
 
@@ -81,14 +88,39 @@ func fetchResults(request string) ([]*gofeed.Item, error) {
 }
 
 func prepareItems(items []*gofeed.Item) {
-	if len(items) > 0 {
-		for _, item := range items {
+	var containsValidItem = false
+	for _, item := range items {
+		if isValidItem(item) {
 			addItem(item)
+			containsValidItem = true
 		}
-	} else {
+	}
+	if !containsValidItem {
 		wf.NewItem("No Results").Valid(false)
 	}
 	wf.SendFeedback()
+}
+
+func isValidItem(item *gofeed.Item) bool {
+	if len(item.Authors) == 0 {
+		return false
+	}
+	if item.Published == "" {
+		return false
+	}
+	if item.Title == "" {
+		return false
+	}
+	return true
+}
+
+func containsValidItem(items []*gofeed.Item) bool {
+	for _, item := range items {
+		if isValidItem(item) {
+			return true
+		}
+	}
+	return false
 }
 
 func addItem(item *gofeed.Item) {
