@@ -47,7 +47,7 @@ func main() {
 		log.Fatal(err)
 		return
 	}
-	filePath, err := generateFilePath(downloadFolder, fileName)
+	filePath := filepath.Join(downloadFolder, fileName+".pdf")
 	if err != nil {
 		log.Fatal(err)
 		return
@@ -76,15 +76,6 @@ func findArticleID(query string) (string, error) {
 		}
 	}
 	return "", errors.New("couldn't extract the article ID from the provided query")
-}
-
-func generateFilePath(downloadFolder string, fileName string) (string, error) {
-	dirName, err := os.UserHomeDir()
-	if err != nil {
-		return "", err
-	}
-	filePath := filepath.Join(dirName, downloadFolder, fileName+".pdf")
-	return filePath, nil
 }
 
 func generateFileName(article *gofeed.Item, PDFNameTemplate string) (string, error) {
