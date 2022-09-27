@@ -19,7 +19,7 @@
 
 ## Download
 
-Click [here](https://github.com/SimonNick/arxiv-alfred/releases/download/v1.2.1/arXiv.alfredworkflow) and download `arXiv.alfredworkflow`.
+Click [here](https://github.com/SimonNick/arxiv-alfred/releases/latest/download/arXiv.alfredworkflow) and download `arXiv.alfredworkflow`.
 
 ## Installation
 
@@ -59,7 +59,7 @@ By default, ArXiv uses `arxiv` as keyword, downloads the PDFs to the Downloads f
 
 ![Step 1](./assets/configure_download_folder_step1.png)
 
-You can now see three text fields that allow you to change the
+You can now see three fields that allow you to change the
 - keyword
 - download folder
 - PDF name format

@@ -48,11 +48,6 @@ func main() {
 		return
 	}
 	filePath := filepath.Join(downloadFolder, fileName+".pdf")
-	if err != nil {
-		log.Fatal(err)
-		return
-	}
-
 	pdfURL := fmt.Sprintf("https://arxiv.org/pdf/%s.pdf", articleID)
 	log.Printf("downloading %s to \"%s\"", pdfURL, filePath)
 	err = downloadFile(pdfURL, filePath)
