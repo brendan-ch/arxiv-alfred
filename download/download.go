@@ -137,7 +137,8 @@ func downloadFile(URL, fileName string) error {
 		return fmt.Errorf("response code: %d", response.StatusCode)
 	}
 
-	file, err := os.Create(fileName)
+	tmpFileName := fileName+".download"
+	file, err := os.Create(tmpFileName)
 	if err != nil {
 		return err
 	}
@@ -147,6 +148,11 @@ func downloadFile(URL, fileName string) error {
 	if err != nil {
 		return err
 	}
+
+	err = os.Rename(tmpFileName, fileName)
+    if err != nil {
+        return err
+    }
 
 	return nil
 }
