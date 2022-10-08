@@ -62,7 +62,7 @@ func findArticleID(query string) (string, error) {
 	// try to extract the article ID (https://arxiv.org/help/arxiv_identifier) from the query
 	patterns := [...]string{
 		`\d{4}.\d{4,5}(?:v\d+)?`,               // ID since April 2007
-		`[a-z]+(?:-[a-z]+)?\/\d{5,7}(?:v\d+)?`, // ID up to March 2007
+		`[a-z]+(?:-[a-z]+)?\/\d{5,7}(?:v\d+)?`, // ID until March 2007
 	}
 	for _, pattern := range patterns {
 		r := regexp.MustCompile(pattern)
@@ -125,7 +125,7 @@ func generateFileName(article *gofeed.Item, PDFNameTemplate string) (string, err
 
 }
 
-func downloadFile(URL, fileName string) error {
+func downloadFile(URL string, fileName string) error {
 
 	response, err := http.Get(URL)
 	if err != nil {
